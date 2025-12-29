@@ -1,7 +1,5 @@
 import { createServer } from './server';
 import { testConnection } from './config/database';
-import { startGuardian } from './guardian';
-import { startNotionSyncAgent } from './agents/notion-sync-agent';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -25,20 +23,16 @@ const startServer = async () => {
       status: 'listening',
       port: PORT,
       endpoints: {
+        health: '/health',
+        auth: '/api/v1/auth',
         llmQuery: '/llm-query',
-        health: '/llm/health',
-        notionSync: '/notion-sync/tasks',
-        infraAlerts: '/infra/infra-alerts',
+        llmHealth: '/llm/health',
+        infra: '/infra',
+        me: '/api/v1/me',
       },
     }, null, 2));
     console.log(`Server running on port ${PORT}`);
   });
-
-  // Inicia Guardian
-  startGuardian();
-  
-  // Inicia Notion Sync Agent
-  startNotionSyncAgent();
 };
 
 startServer();
